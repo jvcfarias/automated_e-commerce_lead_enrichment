@@ -40,9 +40,11 @@ def get_follower_count(instagram_account):
     r = requests.get('https://www.instagram.com/' + instagram_account, headers=headers, timeout=5)
 
     if r.status_code == 429:
+      print(r.status_code)
       return -1
 
     if r.status_code != 200:
+      print(r.status_code)
       return -1
 
     soup = BeautifulSoup(r.content, features="html.parser")
@@ -62,6 +64,7 @@ def get_follower_count2(instagram_account):
     headers = {"User-Agent": "Instagram 76.0.0.15.395 Android (24/7.0; 640dpi; 1440x2560; samsung; SM-G930F; herolte; samsungexynos8890; en_US; 138226743)"}
     r = requests.get(url, headers=headers, timeout=5)
     if r.status_code != 200: 
+      print(r.status_code)
       return -1
 
     # f = open(instagram_account + ".html", "w")
