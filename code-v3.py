@@ -5,6 +5,7 @@ import csv
 from bs4 import BeautifulSoup
 from datetime import datetime
 import time
+from unidecode import unidecode
 
 error_domain = "ERROR_DOMAIN"
 error_instagram = "ERROR_INSTAGRAM"
@@ -25,7 +26,7 @@ def get_instagram_account(site):
       instagram_page = elements[0]['href']
       print(instagram_page)
       instagram_account = instagram_page.split('instagram.com/')[1].split('/', 1)[0]
-      return instagram_account
+      return unidecode(instagram_account)
 
     return error_instagram
 
@@ -122,7 +123,7 @@ for site in sites:
     writer.writerow({"Site": site , "Instagram": instagram_account, "Seguidores": -1, "Data": datetime.now().strftime("%H:%M:%S")})
     continue
   
-  follower_count = get_follower_count2(instagram_account)
+  follower_count = get_follower_count(instagram_account)
 
   # verifica se o instagram bloqueou
   if follower_count == -1:
