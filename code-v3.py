@@ -14,7 +14,7 @@ error = "ERROR"
 def get_instagram_account(site):
   try:
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"}
-    r = requests.get("https://" + site, headers=headers, timeout=5)
+    r = requests.get(site, headers=headers, timeout=5)
     #print(r.status_code)
 
     if r.status_code != 200:
@@ -80,7 +80,7 @@ def get_follower_count2(instagram_account):
 
 def get_last_row_number():
   try: 
-    with open("modelo3.csv", 'r') as fread:
+    with open("ebit2.csv", 'r') as fread:
       for count, line in enumerate(fread):
           pass
     fread.close();
@@ -93,13 +93,13 @@ def get_last_row_number():
 
 
 #Read website list, get website name, and rename column label 
-data = pd.read_csv('vtex.txt', sep=' ', header=None, names=["Site"])
+data = pd.read_csv('ebit2.txt', sep=' ', header=None, names=["Site"])
 sites = data['Site'];
 
 last_row = get_last_row_number()
 
 fieldnames = ["Site", "Instagram", "Seguidores", "Data"]
-f = open("modelo3.csv", "a")
+f = open("ebit2.csv", "a")
 writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator = '\n')
 
 followers_errors_count = 0
@@ -115,15 +115,15 @@ for site in sites:
   instagram_account = get_instagram_account(site)
   
   #tentar com o www
-  if instagram_account == error_domain or instagram_account == error:
-    instagram_account = get_instagram_account("www." + site);
+  # if instagram_account == error_domain or instagram_account == error:
+    # instagram_account = get_instagram_account("www." + site);
 
   if "ERROR" in instagram_account:
     print(str(row) +' - ' + site + ' - ' + instagram_account + ' - ' + '-1' + ' - ' + datetime.now().strftime("%H:%M:%S"));
     writer.writerow({"Site": site , "Instagram": instagram_account, "Seguidores": -1, "Data": datetime.now().strftime("%H:%M:%S")})
     continue
   
-  follower_count = get_follower_count(instagram_account)
+  follower_count = get_follower_count2(instagram_account)
 
   # verifica se o instagram bloqueou
   if follower_count == -1:
@@ -141,7 +141,7 @@ for site in sites:
   writer.writerow({"Site": site , "Instagram": instagram_account, "Seguidores": follower_count, "Data": datetime.now().strftime("%H:%M:%S")})
 
   f.close()
-  f = open("modelo3.csv", "a")
+  f = open("ebit2.csv", "a")
   writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator = '\n')
 
   time.sleep(15)
